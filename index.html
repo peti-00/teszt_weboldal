@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Webáruház</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="webshop.css">
+    <style>
+        .carousel {
+            width: 800px;
+            max-width: 100%;
+            overflow: hidden;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 1s ease-in-out;
+        }
+
+        .carousel img {
+            width: calc(100% / 3);
+            height: auto;
+        }
+
+        #main h1{
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        #search-bar{
+            background-color: transparent;
+            color: white;
+            border: 0px;
+        }
+
+        #search-bar:focus{
+            outline: none;
+        }
+
+
+    </style>
+</head>
+<body>
+<header>
+    <h1 onclick="reset()">Online Webáruház</h1>
+    <div id="welcome-message"></div>
+</header>
+<nav id="menu">
+
+    <a id="home-link" onclick="showmain()">FŐOLDAL</a>
+    <a id="products-link" onclick="showProducts()">TERMÉKEK</a>
+    <a id="fiokom-link" onclick="showSigninForm()">BEJELENTKEZÉS</a>
+    <a id="rendeleseim" CLASS="hidden" onclick="showorder()">RENDELÉSEIM</a>
+    <a href="http://127.0.0.1:5000">SEGÍTSÉG</a>
+    <strong><a id="logout-button" style="display: none; color: red" onclick="logout()">KILÉPÉS</a></strong>
+    <a><input type="text" id="search-bar" placeholder="Keresés" onkeyup="filterProducts()" onclick="showProducts()"></a>
+
+</nav>
+
+
+<div class="container hidden" id="product-container">
+    <div class="product">
+        <img src="liverpool.png" alt="Termék 1">
+        <h3>Liverpool Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Liverpool Lámpa', 'liverpool.png', 5000), animateAddToCart('liverpool.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="manchestercity.png" alt="Termék 2">
+        <h3>Manchester City Lámpa</h3>
+        <p class="price">5 000 Ft</p>,
+        <button class="button" onclick="addToCart('Manchester City Lámpa', 'manchestercity.png', 5000), animateAddToCart('manchestercity.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="arsenal.png" alt="Termék 3">
+        <h3>Arsenal Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Arsenal Lámpa', 'arsenal.png', 5000), animateAddToCart('arsenal.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="tottenham.png" alt="Termék 1">
+        <h3>Tottenham Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Tottenham Lámpa', 'tottenham.png', 5000), animateAddToCart('tottenham.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="manchesterunited.png" alt="Termék 2">
+        <h3>Manchester United Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Manchester United Lámpa', 'manchesterunited.png', 5000), animateAddToCart('manchesterunited.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="westham.png" alt="Termék 3">
+        <h3>West Ham United Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('West Ham United Lámpa', 'westham.png', 5000), animateAddToCart('westham.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="chelsea.png" alt="Termék 1">
+        <h3>Chelsea Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Chelsea Lámpa', 'chelsea.png', 5000), animateAddToCart('chelsea.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="bayernmunchen.jpg" alt="Termék 2">
+        <h3>Bayern München Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Bayern München Lámpa', 'bayernmunchen.jpg', 5000), animateAddToCart('bayernmunchen.jpg')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="parissaintgermain.png" alt="Termék 3">
+        <h3>Paris Saint Germain Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Paris Saint Germain Lámpa', 'parissaintgermain.png', 5000), animateAddToCart('parissaintgermain.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="intermilan.png" alt="Termék 1">
+        <h3>Inter Milan Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Inter Milan Lámpa', 'intermilan.png', 5000), animateAddToCart('intermilan.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="juventus.png" alt="Termék 2">
+        <h3>Juventus Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Juventus Lámpa', 'juventus.png', 5000), animateAddToCart('juventus.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="acmilan.png" alt="Termék 3">
+        <h3>Ac Milan Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Ac Milan Lámpa', 'acmilan.png', 5000), animateAddToCart('acmilan.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="sslazio.png" alt="Termék 1">
+        <h3>S.S.Lazio Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('S.S.Lazio Lámpa', 'sslazio.png', 5000), animateAddToCart('sslazio.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="realmadrid.png" alt="Termék 2">
+        <h3>Real Madrid Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Real Madrid Lámpa', 'realmadrid.png', 5000), animateAddToCart('realmadrid.png')">Kosárba</button>
+    </div>
+    <div class="product">
+        <img src="barcelona.png" alt="Termék 3">
+        <h3>Barcelona Lámpa</h3>
+        <p class="price">5 000 Ft</p>
+        <button class="button" onclick="addToCart('Barcelona Lámpa', 'barcelona.png', 5000), animateAddToCart('barcelona.png')">Kosárba</button>
+    </div>
+
+
+</div>
+
+<div id="regisztracio" class="register-form">
+    <h2>Regisztráció</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Jelszó">
+    <input type="text" id="name" placeholder="Név">
+    <input type="address" id="address" placeholder="Lakcím">
+
+    <button onclick="registerUser()">Regisztráció</button>
+    <center><a style="margin-top: 5px; font-size: 14px; cursor: pointer" onclick="showSigninForm()">Belépés</a></center>
+</div>
+
+<div id="belepes" class="register-form">
+    <h2>Belépés</h2>
+    <input type="email" id="email_" placeholder="Email">
+    <input type="password" id="password_" placeholder="Jelszó">
+    <button onclick="signinUserLocal()">Belépés</button>
+    <center><a style="margin-top: 5px; font-size: 14px; cursor: pointer" onclick="showRegisterForm()">Regisztráció</a></center>
+
+
+
+
+</div>
+<div id="kosar">
+    <img src="shopping_cart.png" alt="Kosár ikon" onclick="showkosar()">
+</div>
+
+<div id="nagykosar" class="register-form">
+    <h2>Kosár tartalma</h2>
+    <div id="cart-list" class="kosar-form"></div>
+    <center><p class="total">Összérték: <span id="total-price">0</span> Ft</p></center>
+    <p style="font-size: 12px">A szállítási díjak a Pénztárnál kerülnek kiszámolásra.</p>
+    <button onclick="showadateldont()">Tovább</button>
+</div>
+
+<div id="vadat" class="register-form">
+    <h2>Szállítási adatok</h2>
+    <p style="text-align: center">Kérjük, válaszd ki a számodra legmegfelelőbb vásárlási formát</p>
+    <div class="container">
+        <div class="divvalasztas" id="div1" onclick="showDiv(1)">folytatás fiókkal</div>
+        <div class="divvalasztas" id="div2" onclick="showDiv(2)">folytatás vendégként</div>
+        <div class="divvalasztas hidden" id="div3">
+            <p>Név: <span id="nev"></span></p>
+            <p>Email: <span id="nemail"></span></p>
+            <p>Cím: <span id="naddress"></span></p>
+        </div>
+        <div class="divvalasztas hidden" id="div4">
+            <p>Név <input id="in1"></p>
+            <p>Email <input id="in2"></p>
+            <p>Cím <input id="in3"></p>
+        </div>
+        <p>Kérjük, válaszd ki szállítás módját</p>
+        <div class="divvalasztas" id="div5" onclick="szall(1)">házhoz szállítás (1500 ft)</div>
+        <div class="divvalasztas" id="div6" onclick="szall(2)">személyes átvétel üzletünkben</div>
+    </div>
+    <button id="fizetes1" class="hidden" onclick="adatvegleg(1)">Fizetés</button>
+    <button id="fizetes2" class="hidden" onclick="adatvegleg(2)">Fizetés</button>
+    <center><p style="margin-top: 5px; font-size: 14px; cursor: pointer" onclick="showkosar()">vissza</p></center>
+</div>
+
+<div id="lead" class="register-form">
+    <h2>Köszönjük rendelését!</h2>
+    <p>név:<span id="leadnev"></span></p>
+    <p>email:<span id="leademail"></span></p>
+    <p>cím:<span id="leadaddress"></span></p>
+    <hr width="100%" size="3px" color="black">
+    <div id="vasterm" class="kosar-form"></div>
+    <hr width="100%" size="3px" color="black">
+    <p>részösszeg: <span id="leadreszosszeg"></span>.ft</p>
+    <p>szállítás:<span id="leadszallitas"></span></p>
+    <p>végösszeg:<span id="leadvegosszeg"></span>.ft</p>
+
+</div>
+<div id="order_" class="register-form hidden">
+    <h2>Rendeléseim</h2>
+    <div id="orders-container"></div>
+    <center><h2 id="szamolasok"></h2></center>
+
+</div>
+
+<div id="main" style="width: 800px; margin: auto">
+    <h1>Egyedi készítésű focis 3D lámpák</h1>
+    <br>
+    <p>Lámpáink tökéletes ajándékok minden korosztálynak felnőtteknek és gyermekeknek egyaránt.
+        Kreatív, egyedi és ötletes, ráadásul megjelenésének köszönhetően bármilyen helyiséget képes feldobni!
+        Szépen mutat a nappaliban, konyhában, hálószobában, kellemes hangulatfényt varázsol a lakásba.
+        Ez a 3D éjszakai lámpa újdonság és elegáns születésnapi ajándék, névnapi ajándék,
+        karácsonyi ajándék,húsvéti ajándék, gyermek napi ajándék stb.</p>
+    <br>
+    <div class="carousel">
+        <div class="carousel-track" id="carousel-track">
+            <img src="liverpool.png" alt="Kép 1">
+            <img src="arsenal.png" alt="Kép 2">
+            <img src="chelsea.png" alt="Kép 3">
+            <img src="manchestercity.png" alt="Kép 4">
+            <img src="manchesterunited.png" alt="Kép 5">
+            <img src="tottenham.png" alt="Kép 6">
+        </div>
+    </div>
+    <p>Gyermekeknek éjjeli fényként is jó szolgálatot tesz.
+        3D illúziós lámpáink érdekessége,hogy a kétdimenziós ábrát különleges megvilágítással
+        háromdimenziósnak látja a szemünk. Lámpa olyan LED-ekkel világít, amelyek soha nem melegednek fel,
+        mégis melegítő fényt adnak, amely segít jobban elaludni, ezáltal tökéletes gyermek szobába.
+        Az akril lap csak 4 mm vastag , egy műanyag bázis alapra ül, ezzel egy stílusos és elegáns lámpát hoz létre.</p>
+
+    <br>
+    <h1>Árdiagram</h1>
+    <br>
+    <center><canvas id="myChart" style="width:100%;max-width:600px"></canvas></center>
+    <br>
+    <h1>Üzletünk lokációja</h1>
+    <br>
+    <center><iframe
+
+            width="800"
+            height="450"
+            style="border:2px; padding-bottom: 50px"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2702.7259940405174!+2d18.984108876660052!3d47.35874730505968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4741e5d29af47c07%3A0x89db6f73a3e909e0!2sBocskai%20Istv%C3%A1n%20Reform%C3%A1tus%20Oktat%C3%A1si%20K%C3%B6zpont!5e0!3m2!1shu!2shu!4v1736407347571!5m2!1shu!2shu">
+    </iframe></center>
+
+
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script>
+    const xValues = ['Szeptember', 'Oktober', 'November', 'December', 'Január'];
+    const yValues = [4000,5000, 5000, 5000, 5000];
+
+    new Chart("myChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(0,0,255,1.0)",
+                borderColor: "rgba(0,0,255,0.1)",
+                data: yValues
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{ticks: {min: 3000, max:10000}}],
+            }
+        }
+    });
+</script>
+
+
+
+
+<script>
+    const track = document.getElementById('carousel-track');
+    const images = track.children;
+    const imageWidth = images[0].getBoundingClientRect().width;
+    let index = 0;
+    let direction = 1; // 1 for forward, -1 for backward
+    function moveCarousel() {
+    index += direction;
+    if (index === images.length - 3 || index === 0) {
+        direction *= -1; // Reverse direction
+    }
+    track.style.transform = `translateX(-${index * imageWidth/2 * 2}px)`;
+    }
+
+    setInterval(moveCarousel, 3000);
+</script>
+
+
+
+
+<script type="module">
+    // Importáljuk a szükséges függvényeket a Firebase SDK-ból
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getFirestore, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+    // Webalkalmazás Firebase konfigurációja
+    const firebaseConfig = {
+        apiKey: "AIzaSyC6kqJoKcP-QDWyOKEK3oi3WAG3Hj7RwIg",
+        authDomain: "webshop-b814e.firebaseapp.com",
+        projectId: "webshop-b814e",
+        storageBucket: "webshop-b814e.firebasestorage.app",
+        messagingSenderId: "790652513065",
+        appId: "1:790652513065:web:e85bdaf3aedd220d74e538"
+    };
+
+    // Firebase inicializálása
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app); // Firestore adatbázis elérése
+
+    // Új felhasználó hozzáadása a Firestore-hoz
+    async function addUser(userDetails) {
+        const { userEmail, userPassword, userName, userAddress } = userDetails;
+
+        try {
+            // Ellenőrizzük, hogy az email már létezik-e
+            const userDocRef = doc(db, "users", userEmail);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (userDocSnap.exists()) {
+                return false; // Ha létezik az email, false-t adunk vissza
+            }
+
+            // Új felhasználó mentése
+            await setDoc(userDocRef, {
+                password: userPassword,
+                name: userName,
+                address: userAddress
+            });
+
+            return true; // Sikeres regisztráció után true-t adunk vissza
+        } catch (error) {
+            console.error("Hiba történt:", error.message);
+            return false; // Hiba esetén false-t adunk vissza
+        }
+    }
+
+    // Bejelentkezés a felhasználó email és jelszó alapján
+    async function signinUser(userEmail, userPassword) {
+        try {
+            const userDocRef = doc(db, "users", userEmail);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (!userDocSnap.exists()) {
+                return { success: false, message: "Ez az email nem található!" };
+            }
+
+            const userData = userDocSnap.data();
+            if (userData.password === userPassword) {
+                return { success: true, data: userData }; // Ha sikeres, visszaküldjük a felhasználó adatait
+            } else {
+                return { success: false, message: "Hibás jelszó!" };
+            }
+        } catch (error) {
+            console.error("Hiba történt:", error.message);
+            return { success: false, message: "Próbálja újra később!" };
+        }
+    }
+
+    async function savedata(vasarlasadat, cartItems) {
+        const groupedItems = [];
+        cartItems.forEach(item => {
+            // Ellenőrizzük, hogy már létezik-e az elem a tömbben
+            const existingItem = groupedItems.find(i => i.name === item.name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                groupedItems.push({ name: item.name, quantity: 1 });
+            }
+        });
+
+        console.log(groupedItems);
+
+        const kosar__ID = vasarlasadat.kosar_ID.toString();
+        let kosar_= '';
+
+        if (vasarlasadat.selected === 2) {
+            kosar_ = '2' + kosar__ID
+            const guessDocRef = doc(db, "guess", kosar_);
+            await setDoc(guessDocRef, {
+                email: vasarlasadat.email,
+                name: vasarlasadat.name,
+                address: vasarlasadat.address,
+            });}
+        else if (vasarlasadat.selected === 1){
+            kosar_ = '1' + kosar__ID
+        }
+
+        const order_dataDocRef = doc(db, "orders_data", kosar_);
+        await setDoc(order_dataDocRef, {
+            part_amount_: vasarlasadat.part_amount,
+            delivery_: vasarlasadat.delivery,
+            total_amount_: vasarlasadat.total_amount,
+            email: vasarlasadat.email,
+        });
+
+
+
+        const OrderDocRef = doc(db, "orders", kosar_);
+
+        // Új objektum a feltöltéshez
+        const orderData = {};
+        groupedItems.forEach(item => {
+            orderData[item.name] = item.quantity;
+        });
+
+        await setDoc(OrderDocRef, orderData);
+
+
+
+        const products_price = doc(db, "products_price", kosar_);
+
+        // Új objektum a feltöltéshez
+        const products_price_ = {};
+        cartItems.forEach(item => {
+            products_price_[item.name] = item.price;
+        });
+
+        await setDoc(products_price, products_price_);
+
+
+    }
+
+
+
+
+
+    async function rendleseimlistzva(mail){
+
+        //const vasarlasadat = {
+        //
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    window.rendleseimlistzva = rendleseimlistzva;
+    window.savedata = savedata;
+    window.addUser = addUser;
+    window.signinUser = signinUser;
+</script>
+
+<script src="webshop.js">
+
+</script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, query, where } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+    // Webalkalmazás Firebase konfigurációja
+    const firebaseConfig = {
+        apiKey: "AIzaSyC6kqJoKcP-QDWyOKEK3oi3WAG3Hj7RwIg",
+        authDomain: "webshop-b814e.firebaseapp.com",
+        projectId: "webshop-b814e",
+        storageBucket: "webshop-b814e.firebasestorage.app",
+        messagingSenderId: "790652513065",
+        appId: "1:790652513065:web:e85bdaf3aedd220d74e538"
+    };
+
+    // Firebase inicializálása
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app); // Firestore adatbázis elérése
+
+    // Funkció, amely lekéri az orders_data gyűjteményben található dokumentumokat egy adott email alapján
+    async function getOrdersByEmail(email) {
+        // orders_data gyűjtemény lekérdezése, ahol az email megegyezik a megadott emaillel
+        const q = query(collection(db, "orders_data"), where("email", "==", email));
+
+        try {
+            const querySnapshot = await getDocs(q); // Dokumentumok lekérése
+            const orders = [];
+
+            for (const docSnapshot of querySnapshot.docs) {
+                // Az adatokat és a dokumentum nevét hozzáadjuk a listához
+                const orderData = docSnapshot.data();
+                const orderId = docSnapshot.id; // A dokumentum neve (ID)
+
+                // Lekérjük az orders gyűjteményből a rendeléshez tartozó dokumentumot
+                const orderDocRef = doc(db, "orders", orderId);
+                const orderDocSnapshot = await getDoc(orderDocRef);
+
+                // Lekérjük a products_price gyűjteményből a rendeléshez tartozó dokumentumot
+                const productsPriceDocRef = doc(db, "products_price", orderId);
+                const productsPriceDocSnapshot = await getDoc(productsPriceDocRef);
+
+                // Ha léteznek a dokumentumok, hozzáadjuk őket az orders listához
+                if (orderDocSnapshot.exists() && productsPriceDocSnapshot.exists()) {
+                    orders.push({
+                        orderId: orderId, // Az orders_data dokumentum neve (ID)
+                        data: orderData,  // Az orders_data dokumentum adatainak
+                        orderDetails: orderDocSnapshot.data(), // Az orders gyűjteményből származó dokumentum adatai
+                        productsPrice: productsPriceDocSnapshot.data() // A products_price gyűjteményből származó dokumentum adatai
+                    });
+                } else {
+                    console.log(`Nincs rendelés vagy termék ár az ${orderId} ID-val.`);
+                }
+            }
+
+            // Az eredmény konzolra írása és megjelenítése a HTML-ben
+            if (orders.length > 0) {
+                console.log("Talált rendelések:");
+                fiokossz = 0;
+                fiokrendelossz = 0;
+                orders.forEach(order => {
+                    console.log(`Rendelés ID: ${order.orderId}`);
+                    console.log("Adatok az orders_data-ból:", order.data);
+                    console.log("Rendelés részletei az orders gyűjteményből:", order.orderDetails);
+                    console.log("Termék árak a products_price gyűjteményből:", order.productsPrice);
+
+                    // HTML div-ben történő megjelenítés
+                    displayOrder(order);
+                    const szamolasok = document.getElementById('szamolasok');
+                    szamolasok.textContent = `rendeléseid száma: ${fiokossz}db  összértéke: ${fiokrendelossz}ft`;
+                    console.log(`adatok: ${fiokossz}, ${fiokrendelossz}`)
+                });
+            } else {
+                console.log("Nincsenek rendelések ezen az email címen.");
+                const szamolasok = document.getElementById('szamolasok');
+                szamolasok.textContent = "Ehez a fiókhóz még nem tartozik rendelés :(";
+
+            }
+        } catch (error) {
+            console.error("Hiba történt a lekérés közben:", error);
+        }
+    }
+
+    // Funkció az adatok megjelenítésére HTML div-ben
+
+    let fiokossz = 0;
+    let fiokrendelossz = 0;
+    function displayOrder(order) {
+        // A "rendelések" div elem, ahova hozzáadjuk a rendeléseket
+        const ordersContainer = document.getElementById("orders-container");
+
+        // Létrehozzuk a rendelés div-jét, ami minden rendeléshez tartozik
+        const orderDiv = document.createElement("div");
+        orderDiv.classList.add("order"); // Osztály, amit a rendeléshez adunk
+
+        // Rendelés ID
+        const orderIdDiv = document.createElement("div");
+        orderIdDiv.classList.add("order-id");
+        orderIdDiv.textContent = `Rendelés ID: ${order.orderId}`;
+        orderDiv.appendChild(orderIdDiv);
+
+
+        const hr = document.createElement("hr");
+        orderIdDiv.appendChild(hr);
+
+
+
+
+
+        const orderDetailsDiv = document.createElement("div");
+        orderDetailsDiv.classList.add("order-details");
+
+// Iterálj végig az orderDetails objektum minden elemén
+        const orderDetails = order.orderDetails;
+        const productsPrice = order.productsPrice;
+
+// Létrehozunk egy tömböt, ami összekapcsolja a két gyűjteményt
+        const mergedData = Object.keys(orderDetails).map(key => {
+            return {
+                key: key,
+                orderDetail: orderDetails[key],
+                productPrice: productsPrice[key] || null // Ha nincs termék ár, akkor null-t adunk
+            };
+        });
+
+// Kiírás a DOM-ba
+        mergedData.forEach(item => {
+            const detailDiv = document.createElement("div");
+            detailDiv.textContent = `${item.key} | ${item.orderDetail} db | ${item.productPrice * item.orderDetail}ft`;
+            orderDetailsDiv.appendChild(detailDiv);
+        });
+
+        orderDiv.appendChild(orderDetailsDiv);
+        const hr2 = document.createElement("hr");
+        orderDetailsDiv.appendChild(hr2);
+
+        //rész össeg
+
+        const orderDataDiv = document.createElement("div");
+        orderDataDiv.classList.add("order-data");
+
+
+        const reszosz  = "part_amount_";
+        const specificData = order.data[reszosz];
+
+
+        orderDataDiv.textContent = `részösszeg: ${specificData}.ft`;
+        orderDiv.appendChild(orderDataDiv);
+
+        //szallit
+
+        const orderDataDiv1 = document.createElement("div");
+        orderDataDiv1.classList.add("order-data");
+
+        const szallit = "delivery_";
+        const szallitkey = order.data[szallit];
+        if (szallitkey === 'h'){
+            orderDataDiv1.textContent = `házhoz szállítás + 1500ft`;
+            orderDiv.appendChild(orderDataDiv1);
+        }
+        else if(szallitkey === 'sz'){
+            orderDataDiv1.textContent = `személyes átvétel ingyenes`;
+            orderDiv.appendChild(orderDataDiv1);
+        }
+
+        //végösszeg
+
+        const orderDataDiv2 = document.createElement("div");
+        orderDataDiv2.classList.add("order-data");
+
+
+        const teljesszosz  = "total_amount_";
+        const teljesszoszdata = order.data[teljesszosz];
+
+
+        orderDataDiv2.textContent = `végösszeg: ${teljesszoszdata}.ft`;
+        orderDiv.appendChild(orderDataDiv2);
+
+        fiokrendelossz += teljesszoszdata
+        fiokossz += 1
+
+
+
+
+
+
+
+        // Minden rendelés div-jét hozzáadjuk a rendeléseket tartalmazó konténerhez
+        ordersContainer.appendChild(orderDiv);
+    }
+
+    // Példa: funkció meghívása egy adott email címre
+
+
+    // Példa: funkció meghívása egy adott email címre
+
+    window.getOrdersByEmail = getOrdersByEmail;
+
+</script>
+
+</body>
+</html>
